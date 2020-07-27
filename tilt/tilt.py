@@ -68,7 +68,7 @@ def from_int(x: Any) -> int:
     return x
 
 
-class TheAdministrativeFeeSchema:
+class AdministrativeFee:
     """The fee that refers to several copies."""
     """The amount of money to be paid for a copy."""
     amount: float
@@ -82,11 +82,11 @@ class TheAdministrativeFeeSchema:
         self.currency = currency
 
     @staticmethod
-    def from_dict(obj: Any) -> 'TheAdministrativeFeeSchema':
+    def from_dict(obj: Any) -> 'AdministrativeFee':
         assert isinstance(obj, dict)
         amount = from_float(obj.get("amount"))
         currency = from_str(obj.get("currency"))
-        return TheAdministrativeFeeSchema(amount, currency)
+        return AdministrativeFee(amount, currency)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -95,10 +95,10 @@ class TheAdministrativeFeeSchema:
         return result
 
 
-class TheAccessAndDataPortabilitySchema:
+class AccessAndDataPortability:
     """Defining the right to access and data portability."""
     """The fee that refers to several copies."""
-    administrative_fee: Optional[TheAdministrativeFeeSchema]
+    administrative_fee: Optional[AdministrativeFee]
     """The information is subject to the requirements of Art. 20 (right to data portability)
     GDPR.
     """
@@ -114,7 +114,7 @@ class TheAccessAndDataPortabilitySchema:
     """URL to relevant resources such as access portals."""
     url: Optional[str]
 
-    def __init__(self, administrative_fee: Optional[TheAdministrativeFeeSchema], available: bool, data_formats: Optional[List[str]], description: Optional[str], email: Optional[str], identification_evidences: Optional[List[str]], url: Optional[str]) -> None:
+    def __init__(self, administrative_fee: Optional[AdministrativeFee], available: bool, data_formats: Optional[List[str]], description: Optional[str], email: Optional[str], identification_evidences: Optional[List[str]], url: Optional[str]) -> None:
         self.administrative_fee = administrative_fee
         self.available = available
         self.data_formats = data_formats
@@ -124,20 +124,20 @@ class TheAccessAndDataPortabilitySchema:
         self.url = url
 
     @staticmethod
-    def from_dict(obj: Any) -> 'TheAccessAndDataPortabilitySchema':
+    def from_dict(obj: Any) -> 'AccessAndDataPortability':
         assert isinstance(obj, dict)
-        administrative_fee = from_union([TheAdministrativeFeeSchema.from_dict, from_none], obj.get("administrativeFee"))
+        administrative_fee = from_union([AdministrativeFee.from_dict, from_none], obj.get("administrativeFee"))
         available = from_bool(obj.get("available"))
         data_formats = from_union([lambda x: from_list(from_str, x), from_none], obj.get("dataFormats"))
         description = from_union([from_str, from_none], obj.get("description"))
         email = from_union([from_str, from_none], obj.get("email"))
         identification_evidences = from_union([lambda x: from_list(from_str, x), from_none], obj.get("identificationEvidences"))
         url = from_union([from_str, from_none], obj.get("url"))
-        return TheAccessAndDataPortabilitySchema(administrative_fee, available, data_formats, description, email, identification_evidences, url)
+        return AccessAndDataPortability(administrative_fee, available, data_formats, description, email, identification_evidences, url)
 
     def to_dict(self) -> dict:
         result: dict = {}
-        result["administrativeFee"] = from_union([lambda x: to_class(TheAdministrativeFeeSchema, x), from_none], self.administrative_fee)
+        result["administrativeFee"] = from_union([lambda x: to_class(AdministrativeFee, x), from_none], self.administrative_fee)
         result["available"] = from_bool(self.available)
         result["dataFormats"] = from_union([lambda x: from_list(from_str, x), from_none], self.data_formats)
         result["description"] = from_union([from_str, from_none], self.description)
@@ -147,7 +147,7 @@ class TheAccessAndDataPortabilitySchema:
         return result
 
 
-class TheAutomatedDecisionMakingSchema:
+class AutomatedDecisionMaking:
     """Automated decision making and potentially involved logic. Does include profiling."""
     """Is automated decision making in use?"""
     in_use: Optional[bool]
@@ -162,12 +162,12 @@ class TheAutomatedDecisionMakingSchema:
         self.scope_and_intended_effects = scope_and_intended_effects
 
     @staticmethod
-    def from_dict(obj: Any) -> 'TheAutomatedDecisionMakingSchema':
+    def from_dict(obj: Any) -> 'AutomatedDecisionMaking':
         assert isinstance(obj, dict)
         in_use = from_union([from_bool, from_none], obj.get("inUse"))
         logic_involved = from_union([from_str, from_none], obj.get("logicInvolved"))
         scope_and_intended_effects = from_union([from_str, from_none], obj.get("scopeAndIntendedEffects"))
-        return TheAutomatedDecisionMakingSchema(in_use, logic_involved, scope_and_intended_effects)
+        return AutomatedDecisionMaking(in_use, logic_involved, scope_and_intended_effects)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -184,9 +184,9 @@ class ChangesOfPurposeElement:
     description: Optional[str]
     """Specify the planned date to the changes as ISO 8601 string."""
     planned_date_of_change: Optional[str]
-    """The URL points to a document of the same schema as this one. That creates a chain of
-    information requirements for seamless recognition of transparency information even over a
-    longer period of time.
+    """URL points to a document of the same as this one. That creates a chain of information
+    requirements for seamless recognition of transparency information even over a longer
+    period of time.
     """
     url_of_new_version: Optional[str]
 
@@ -244,7 +244,7 @@ class ControllerRepresentative:
         return result
 
 
-class TheControllerSchema:
+class Controller:
     """The responsible controller is defined in here."""
     """Address of the controller."""
     address: str
@@ -267,14 +267,14 @@ class TheControllerSchema:
         self.representative = representative
 
     @staticmethod
-    def from_dict(obj: Any) -> 'TheControllerSchema':
+    def from_dict(obj: Any) -> 'Controller':
         assert isinstance(obj, dict)
         address = from_str(obj.get("address"))
         country = from_str(obj.get("country"))
         division = from_union([from_str, from_none], obj.get("division"))
         name = from_str(obj.get("name"))
         representative = ControllerRepresentative.from_dict(obj.get("representative"))
-        return TheControllerSchema(address, country, division, name, representative)
+        return Controller(address, country, division, name, representative)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -286,7 +286,7 @@ class TheControllerSchema:
         return result
 
 
-class TheAnyOfSchemaForTheLegalBasesOfTheDataDisclosed:
+class AnyOfSchemaForTheLegalBasesOfTheDataDisclosed:
     """An explanation about the legal basis used."""
     description: Optional[str]
     """This field refers to the reference in legal regulations (laws, orders, declaration etc.).
@@ -300,11 +300,11 @@ class TheAnyOfSchemaForTheLegalBasesOfTheDataDisclosed:
         self.reference = reference
 
     @staticmethod
-    def from_dict(obj: Any) -> 'TheAnyOfSchemaForTheLegalBasesOfTheDataDisclosed':
+    def from_dict(obj: Any) -> 'AnyOfSchemaForTheLegalBasesOfTheDataDisclosed':
         assert isinstance(obj, dict)
         description = from_union([from_str, from_none], obj.get("description"))
         reference = from_str(obj.get("reference"))
-        return TheAnyOfSchemaForTheLegalBasesOfTheDataDisclosed(description, reference)
+        return AnyOfSchemaForTheLegalBasesOfTheDataDisclosed(description, reference)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -313,7 +313,7 @@ class TheAnyOfSchemaForTheLegalBasesOfTheDataDisclosed:
         return result
 
 
-class TheAnyOfSchemaForLegitimateInterests:
+class AnyOfSchemaForLegitimateInterests:
     """The legitimate interest only has to be stated if the processing is carried out in
     accordance with Art. 13 (1d). This field refers to the existence of such an interest.
     """
@@ -328,11 +328,11 @@ class TheAnyOfSchemaForLegitimateInterests:
         self.reasoning = reasoning
 
     @staticmethod
-    def from_dict(obj: Any) -> 'TheAnyOfSchemaForLegitimateInterests':
+    def from_dict(obj: Any) -> 'AnyOfSchemaForLegitimateInterests':
         assert isinstance(obj, dict)
         exists = from_union([from_bool, from_none], obj.get("exists"))
         reasoning = from_union([from_str, from_none], obj.get("reasoning"))
-        return TheAnyOfSchemaForLegitimateInterests(exists, reasoning)
+        return AnyOfSchemaForLegitimateInterests(exists, reasoning)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -341,7 +341,7 @@ class TheAnyOfSchemaForLegitimateInterests:
         return result
 
 
-class TheNonDisclosureSchema:
+class NonDisclosure:
     """This schema refers to the necessity and consequences of non-disclosure of personal data.
     According to Art. 13 (2e), this refers to the information whether the provision of the
     personal data is required by law or contract or is required for the conclusion of a
@@ -364,13 +364,13 @@ class TheNonDisclosureSchema:
         self.obligation_to_provide = obligation_to_provide
 
     @staticmethod
-    def from_dict(obj: Any) -> 'TheNonDisclosureSchema':
+    def from_dict(obj: Any) -> 'NonDisclosure':
         assert isinstance(obj, dict)
         consequences = from_str(obj.get("consequences"))
         contractual_regulation = from_bool(obj.get("contractualRegulation"))
         legal_requirement = from_bool(obj.get("legalRequirement"))
         obligation_to_provide = from_bool(obj.get("obligationToProvide"))
-        return TheNonDisclosureSchema(consequences, contractual_regulation, legal_requirement, obligation_to_provide)
+        return NonDisclosure(consequences, contractual_regulation, legal_requirement, obligation_to_provide)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -381,7 +381,7 @@ class TheNonDisclosureSchema:
         return result
 
 
-class TheAnyOfSchemaForThePurposes:
+class AnyOfSchemaForThePurposes:
     """This schema refers to an exact description of the purpose the data is processed for."""
     description: str
     """In this schema the purpose is specified (i.e. a headline or purpose category)."""
@@ -392,11 +392,11 @@ class TheAnyOfSchemaForThePurposes:
         self.purpose = purpose
 
     @staticmethod
-    def from_dict(obj: Any) -> 'TheAnyOfSchemaForThePurposes':
+    def from_dict(obj: Any) -> 'AnyOfSchemaForThePurposes':
         assert isinstance(obj, dict)
         description = from_str(obj.get("description"))
         purpose = from_str(obj.get("purpose"))
-        return TheAnyOfSchemaForThePurposes(description, purpose)
+        return AnyOfSchemaForThePurposes(description, purpose)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -435,7 +435,7 @@ class RecipientRepresentative:
         return result
 
 
-class The:
+class Recipient:
     """The address of the third party (recipient)."""
     address: Optional[str]
     """The category of the the recipient.
@@ -465,7 +465,7 @@ class The:
         self.representative = representative
 
     @staticmethod
-    def from_dict(obj: Any) -> 'The':
+    def from_dict(obj: Any) -> 'Recipient':
         assert isinstance(obj, dict)
         address = from_union([from_str, from_none], obj.get("address"))
         category = from_str(obj.get("category"))
@@ -473,7 +473,7 @@ class The:
         division = from_union([from_str, from_none], obj.get("division"))
         name = from_union([from_str, from_none], obj.get("name"))
         representative = from_union([RecipientRepresentative.from_dict, from_none], obj.get("representative"))
-        return The(address, category, country, division, name, representative)
+        return Recipient(address, category, country, division, name, representative)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -486,7 +486,7 @@ class The:
         return result
 
 
-class TheAggregationFunctionSchema(Enum):
+class AggregationFunction(Enum):
     """The aggregation function describes the calculation basis when specifying several time
     intervals. For example, if there is storage for 2 weeks for technical reasons (e.g.
     backup), but there is a legally longer retention period, the maximum aggregation function
@@ -532,7 +532,7 @@ class StorageElement:
     (max) would be selected (standard case). Aggregation functions available: min, max, sum,
     avg
     """
-    aggregation_function: TheAggregationFunctionSchema
+    aggregation_function: AggregationFunction
     """If the storage is required by law, the respective one has to specified in here."""
     legal_basis_conditional: List[str]
     """Specifies the purpose that requires data storage."""
@@ -542,7 +542,7 @@ class StorageElement:
     """
     temporal: List[TemporalElement]
 
-    def __init__(self, aggregation_function: TheAggregationFunctionSchema, legal_basis_conditional: List[str], purpose_conditional: List[str], temporal: List[TemporalElement]) -> None:
+    def __init__(self, aggregation_function: AggregationFunction, legal_basis_conditional: List[str], purpose_conditional: List[str], temporal: List[TemporalElement]) -> None:
         self.aggregation_function = aggregation_function
         self.legal_basis_conditional = legal_basis_conditional
         self.purpose_conditional = purpose_conditional
@@ -551,7 +551,7 @@ class StorageElement:
     @staticmethod
     def from_dict(obj: Any) -> 'StorageElement':
         assert isinstance(obj, dict)
-        aggregation_function = TheAggregationFunctionSchema(obj.get("aggregationFunction"))
+        aggregation_function = AggregationFunction(obj.get("aggregationFunction"))
         legal_basis_conditional = from_list(from_str, obj.get("legalBasisConditional"))
         purpose_conditional = from_list(from_str, obj.get("purposeConditional"))
         temporal = from_list(TemporalElement.from_dict, obj.get("temporal"))
@@ -559,7 +559,7 @@ class StorageElement:
 
     def to_dict(self) -> dict:
         result: dict = {}
-        result["aggregationFunction"] = to_enum(TheAggregationFunctionSchema, self.aggregation_function)
+        result["aggregationFunction"] = to_enum(AggregationFunction, self.aggregation_function)
         result["legalBasisConditional"] = from_list(from_str, self.legal_basis_conditional)
         result["purposeConditional"] = from_list(from_str, self.purpose_conditional)
         result["temporal"] = from_list(lambda x: to_class(TemporalElement, x), self.temporal)
@@ -576,24 +576,24 @@ class DataDisclosedElement:
     """The data (category) the data disclosed is referred to."""
     category: str
     """An explanation about the legal bases for the processing of personal data disclosed."""
-    legal_bases: List[TheAnyOfSchemaForTheLegalBasesOfTheDataDisclosed]
-    """An explanation about  the legitimate interests for the processing of data disclosed."""
-    legitimate_interests: List[TheAnyOfSchemaForLegitimateInterests]
+    legal_bases: List[AnyOfSchemaForTheLegalBasesOfTheDataDisclosed]
+    """An explanation about the legitimate interests for the processing of data disclosed."""
+    legitimate_interests: List[AnyOfSchemaForLegitimateInterests]
     """This schema refers to the necessity and consequences of non-disclosure of personal data.
     According to Art. 13 (2e), this refers to the information whether the provision of the
     personal data is required by law or contract or is required for the conclusion of a
     contract, whether the data subject is obliged to provide the personal data and the
     possible consequences of not providing it.
     """
-    non_disclosure: TheNonDisclosureSchema
+    non_disclosure: NonDisclosure
     """The purpose for which a data item is processed for."""
-    purposes: List[TheAnyOfSchemaForThePurposes]
+    purposes: List[AnyOfSchemaForThePurposes]
     """An explanation about the recipients of the data disclosed."""
-    recipients: List[The]
+    recipients: List[Recipient]
     """In this section, the duration of storage or storage criteria are given."""
     storage: List[StorageElement]
 
-    def __init__(self, id: str, category: str, legal_bases: List[TheAnyOfSchemaForTheLegalBasesOfTheDataDisclosed], legitimate_interests: List[TheAnyOfSchemaForLegitimateInterests], non_disclosure: TheNonDisclosureSchema, purposes: List[TheAnyOfSchemaForThePurposes], recipients: List[The], storage: List[StorageElement]) -> None:
+    def __init__(self, id: str, category: str, legal_bases: List[AnyOfSchemaForTheLegalBasesOfTheDataDisclosed], legitimate_interests: List[AnyOfSchemaForLegitimateInterests], non_disclosure: NonDisclosure, purposes: List[AnyOfSchemaForThePurposes], recipients: List[Recipient], storage: List[StorageElement]) -> None:
         self.id = id
         self.category = category
         self.legal_bases = legal_bases
@@ -608,11 +608,11 @@ class DataDisclosedElement:
         assert isinstance(obj, dict)
         id = from_str(obj.get("_id"))
         category = from_str(obj.get("category"))
-        legal_bases = from_list(TheAnyOfSchemaForTheLegalBasesOfTheDataDisclosed.from_dict, obj.get("legalBases"))
-        legitimate_interests = from_list(TheAnyOfSchemaForLegitimateInterests.from_dict, obj.get("legitimateInterests"))
-        non_disclosure = TheNonDisclosureSchema.from_dict(obj.get("nonDisclosure"))
-        purposes = from_list(TheAnyOfSchemaForThePurposes.from_dict, obj.get("purposes"))
-        recipients = from_list(The.from_dict, obj.get("recipients"))
+        legal_bases = from_list(AnyOfSchemaForTheLegalBasesOfTheDataDisclosed.from_dict, obj.get("legalBases"))
+        legitimate_interests = from_list(AnyOfSchemaForLegitimateInterests.from_dict, obj.get("legitimateInterests"))
+        non_disclosure = NonDisclosure.from_dict(obj.get("nonDisclosure"))
+        purposes = from_list(AnyOfSchemaForThePurposes.from_dict, obj.get("purposes"))
+        recipients = from_list(Recipient.from_dict, obj.get("recipients"))
         storage = from_list(StorageElement.from_dict, obj.get("storage"))
         return DataDisclosedElement(id, category, legal_bases, legitimate_interests, non_disclosure, purposes, recipients, storage)
 
@@ -620,16 +620,16 @@ class DataDisclosedElement:
         result: dict = {}
         result["_id"] = from_str(self.id)
         result["category"] = from_str(self.category)
-        result["legalBases"] = from_list(lambda x: to_class(TheAnyOfSchemaForTheLegalBasesOfTheDataDisclosed, x), self.legal_bases)
-        result["legitimateInterests"] = from_list(lambda x: to_class(TheAnyOfSchemaForLegitimateInterests, x), self.legitimate_interests)
-        result["nonDisclosure"] = to_class(TheNonDisclosureSchema, self.non_disclosure)
-        result["purposes"] = from_list(lambda x: to_class(TheAnyOfSchemaForThePurposes, x), self.purposes)
-        result["recipients"] = from_list(lambda x: to_class(The, x), self.recipients)
+        result["legalBases"] = from_list(lambda x: to_class(AnyOfSchemaForTheLegalBasesOfTheDataDisclosed, x), self.legal_bases)
+        result["legitimateInterests"] = from_list(lambda x: to_class(AnyOfSchemaForLegitimateInterests, x), self.legitimate_interests)
+        result["nonDisclosure"] = to_class(NonDisclosure, self.non_disclosure)
+        result["purposes"] = from_list(lambda x: to_class(AnyOfSchemaForThePurposes, x), self.purposes)
+        result["recipients"] = from_list(lambda x: to_class(Recipient, x), self.recipients)
         result["storage"] = from_list(lambda x: to_class(StorageElement, x), self.storage)
         return result
 
 
-class TheDataProtectionOfficerSchema:
+class DataProtectionOfficer:
     """The Data Protection Officer (DPO) of the controller."""
     """Address of the DPO."""
     address: str
@@ -650,14 +650,14 @@ class TheDataProtectionOfficerSchema:
         self.phone = phone
 
     @staticmethod
-    def from_dict(obj: Any) -> 'TheDataProtectionOfficerSchema':
+    def from_dict(obj: Any) -> 'DataProtectionOfficer':
         assert isinstance(obj, dict)
         address = from_str(obj.get("address"))
         country = from_str(obj.get("country"))
         email = from_str(obj.get("email"))
         name = from_str(obj.get("name"))
         phone = from_union([from_str, from_none], obj.get("phone"))
-        return TheDataProtectionOfficerSchema(address, country, email, name, phone)
+        return DataProtectionOfficer(address, country, email, name, phone)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -669,7 +669,7 @@ class TheDataProtectionOfficerSchema:
         return result
 
 
-class TheMetaSchema:
+class Meta:
     """Meta information for the identification and verification of the document."""
     """The hash is based on one SHA256 calculation of the document."""
     hash: str
@@ -706,7 +706,7 @@ class TheMetaSchema:
         self.version = version
 
     @staticmethod
-    def from_dict(obj: Any) -> 'TheMetaSchema':
+    def from_dict(obj: Any) -> 'Meta':
         assert isinstance(obj, dict)
         hash = from_str(obj.get("_hash"))
         id = from_str(obj.get("_id"))
@@ -717,7 +717,7 @@ class TheMetaSchema:
         status = from_str(obj.get("status"))
         url = from_str(obj.get("url"))
         version = from_int(obj.get("version"))
-        return TheMetaSchema(hash, id, created, language, modified, name, status, url, version)
+        return Meta(hash, id, created, language, modified, name, status, url, version)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -733,7 +733,7 @@ class TheMetaSchema:
         return result
 
 
-class TheSupervisoryAuthoritySchema:
+class SupervisoryAuthority:
     """Defines the supervisory authority that has to be contacted in order to complain about the
     data controller's practices.
     """
@@ -756,14 +756,14 @@ class TheSupervisoryAuthoritySchema:
         self.phone = phone
 
     @staticmethod
-    def from_dict(obj: Any) -> 'TheSupervisoryAuthoritySchema':
+    def from_dict(obj: Any) -> 'SupervisoryAuthority':
         assert isinstance(obj, dict)
         address = from_union([from_str, from_none], obj.get("address"))
         country = from_union([from_str, from_none], obj.get("country"))
         email = from_union([from_str, from_none], obj.get("email"))
         name = from_str(obj.get("name"))
         phone = from_union([from_str, from_none], obj.get("phone"))
-        return TheSupervisoryAuthoritySchema(address, country, email, name, phone)
+        return SupervisoryAuthority(address, country, email, name, phone)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -775,7 +775,7 @@ class TheSupervisoryAuthoritySchema:
         return result
 
 
-class TheRightToComplainSchema:
+class RightToComplain:
     """This schema refers to the right to complain."""
     """Is this right available?"""
     available: Optional[bool]
@@ -785,10 +785,10 @@ class TheRightToComplainSchema:
     """Defines the supervisory authority that has to be contacted in order to complain about the
     data controller's practices.
     """
-    supervisory_authority: Optional[TheSupervisoryAuthoritySchema]
+    supervisory_authority: Optional[SupervisoryAuthority]
     url: Optional[str]
 
-    def __init__(self, available: Optional[bool], description: Optional[str], email: Optional[str], identification_evidences: Optional[List[str]], supervisory_authority: Optional[TheSupervisoryAuthoritySchema], url: Optional[str]) -> None:
+    def __init__(self, available: Optional[bool], description: Optional[str], email: Optional[str], identification_evidences: Optional[List[str]], supervisory_authority: Optional[SupervisoryAuthority], url: Optional[str]) -> None:
         self.available = available
         self.description = description
         self.email = email
@@ -797,15 +797,15 @@ class TheRightToComplainSchema:
         self.url = url
 
     @staticmethod
-    def from_dict(obj: Any) -> 'TheRightToComplainSchema':
+    def from_dict(obj: Any) -> 'RightToComplain':
         assert isinstance(obj, dict)
         available = from_union([from_bool, from_none], obj.get("available"))
         description = from_union([from_str, from_none], obj.get("description"))
         email = from_union([from_str, from_none], obj.get("email"))
         identification_evidences = from_union([lambda x: from_list(from_str, x), from_none], obj.get("identificationEvidences"))
-        supervisory_authority = from_union([TheSupervisoryAuthoritySchema.from_dict, from_none], obj.get("supervisoryAuthority"))
+        supervisory_authority = from_union([SupervisoryAuthority.from_dict, from_none], obj.get("supervisoryAuthority"))
         url = from_union([from_str, from_none], obj.get("url"))
-        return TheRightToComplainSchema(available, description, email, identification_evidences, supervisory_authority, url)
+        return RightToComplain(available, description, email, identification_evidences, supervisory_authority, url)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -813,12 +813,12 @@ class TheRightToComplainSchema:
         result["description"] = from_union([from_str, from_none], self.description)
         result["email"] = from_union([from_str, from_none], self.email)
         result["identificationEvidences"] = from_union([lambda x: from_list(from_str, x), from_none], self.identification_evidences)
-        result["supervisoryAuthority"] = from_union([lambda x: to_class(TheSupervisoryAuthoritySchema, x), from_none], self.supervisory_authority)
+        result["supervisoryAuthority"] = from_union([lambda x: to_class(SupervisoryAuthority, x), from_none], self.supervisory_authority)
         result["url"] = from_union([from_str, from_none], self.url)
         return result
 
 
-class TheRightToDataPortabilitySchema:
+class RightToDataPortability:
     """The right to data portability as stated in Art. 20 GDPR."""
     available: Optional[bool]
     description: Optional[str]
@@ -834,14 +834,14 @@ class TheRightToDataPortabilitySchema:
         self.url = url
 
     @staticmethod
-    def from_dict(obj: Any) -> 'TheRightToDataPortabilitySchema':
+    def from_dict(obj: Any) -> 'RightToDataPortability':
         assert isinstance(obj, dict)
         available = from_union([from_bool, from_none], obj.get("available"))
         description = from_union([from_str, from_none], obj.get("description"))
         email = from_union([from_str, from_none], obj.get("email"))
         identification_evidences = from_union([lambda x: from_list(from_str, x), from_none], obj.get("identificationEvidences"))
         url = from_union([from_str, from_none], obj.get("url"))
-        return TheRightToDataPortabilitySchema(available, description, email, identification_evidences, url)
+        return RightToDataPortability(available, description, email, identification_evidences, url)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -853,7 +853,7 @@ class TheRightToDataPortabilitySchema:
         return result
 
 
-class TheRightToInformationSchema:
+class RightToInformation:
     """Refers to the right of information."""
     """Possibility available?"""
     available: Optional[bool]
@@ -872,14 +872,14 @@ class TheRightToInformationSchema:
         self.url = url
 
     @staticmethod
-    def from_dict(obj: Any) -> 'TheRightToInformationSchema':
+    def from_dict(obj: Any) -> 'RightToInformation':
         assert isinstance(obj, dict)
         available = from_union([from_bool, from_none], obj.get("available"))
         description = from_union([from_str, from_none], obj.get("description"))
         email = from_union([from_str, from_none], obj.get("email"))
         identification_evidences = from_union([lambda x: from_list(from_str, x), from_none], obj.get("identificationEvidences"))
         url = from_union([from_str, from_none], obj.get("url"))
-        return TheRightToInformationSchema(available, description, email, identification_evidences, url)
+        return RightToInformation(available, description, email, identification_evidences, url)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -891,7 +891,7 @@ class TheRightToInformationSchema:
         return result
 
 
-class TheRightToRectificationOrDeletionSchema:
+class RightToRectificationOrDeletion:
     """This schema refers to the right to rectification or deletion (Art. 16 GDPR)."""
     """Possibility available?"""
     available: Optional[bool]
@@ -908,14 +908,14 @@ class TheRightToRectificationOrDeletionSchema:
         self.url = url
 
     @staticmethod
-    def from_dict(obj: Any) -> 'TheRightToRectificationOrDeletionSchema':
+    def from_dict(obj: Any) -> 'RightToRectificationOrDeletion':
         assert isinstance(obj, dict)
         available = from_union([from_bool, from_none], obj.get("available"))
         description = from_union([from_str, from_none], obj.get("description"))
         email = from_union([from_str, from_none], obj.get("email"))
         identification_evidences = from_union([lambda x: from_list(from_str, x), from_none], obj.get("identificationEvidences"))
         url = from_union([from_str, from_none], obj.get("url"))
-        return TheRightToRectificationOrDeletionSchema(available, description, email, identification_evidences, url)
+        return RightToRectificationOrDeletion(available, description, email, identification_evidences, url)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -927,7 +927,7 @@ class TheRightToRectificationOrDeletionSchema:
         return result
 
 
-class TheRightToWithdrawConsentSchema:
+class RightToWithdrawConsent:
     """This schema refers to the right to withdraw consent."""
     available: Optional[bool]
     description: Optional[str]
@@ -943,14 +943,14 @@ class TheRightToWithdrawConsentSchema:
         self.url = url
 
     @staticmethod
-    def from_dict(obj: Any) -> 'TheRightToWithdrawConsentSchema':
+    def from_dict(obj: Any) -> 'RightToWithdrawConsent':
         assert isinstance(obj, dict)
         available = from_union([from_bool, from_none], obj.get("available"))
         description = from_union([from_str, from_none], obj.get("description"))
         email = from_union([from_str, from_none], obj.get("email"))
         identification_evidences = from_union([lambda x: from_list(from_str, x), from_none], obj.get("identificationEvidences"))
         url = from_union([from_str, from_none], obj.get("url"))
-        return TheRightToWithdrawConsentSchema(available, description, email, identification_evidences, url)
+        return RightToWithdrawConsent(available, description, email, identification_evidences, url)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -1020,7 +1020,7 @@ class TiltSource:
         return result
 
 
-class TheAdequacyDecisionSchema:
+class AdequacyDecision:
     """Adequacy decision by the European commission exists?"""
     available: Optional[bool]
     """Description of the adequacy decision by the European commission."""
@@ -1031,11 +1031,11 @@ class TheAdequacyDecisionSchema:
         self.description = description
 
     @staticmethod
-    def from_dict(obj: Any) -> 'TheAdequacyDecisionSchema':
+    def from_dict(obj: Any) -> 'AdequacyDecision':
         assert isinstance(obj, dict)
         available = from_union([from_bool, from_none], obj.get("available"))
         description = from_union([from_str, from_none], obj.get("description"))
-        return TheAdequacyDecisionSchema(available, description)
+        return AdequacyDecision(available, description)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -1044,7 +1044,7 @@ class TheAdequacyDecisionSchema:
         return result
 
 
-class TheAppropriateGuaranteesSchema:
+class AppropriateGuarantees:
     """Suitable guarantees according to Art. 45"""
     """Do suitable guarantees according to Art. 45 exist?"""
     available: Optional[bool]
@@ -1056,11 +1056,11 @@ class TheAppropriateGuaranteesSchema:
         self.description = description
 
     @staticmethod
-    def from_dict(obj: Any) -> 'TheAppropriateGuaranteesSchema':
+    def from_dict(obj: Any) -> 'AppropriateGuarantees':
         assert isinstance(obj, dict)
         available = from_union([from_bool, from_none], obj.get("available"))
         description = from_union([from_str, from_none], obj.get("description"))
-        return TheAppropriateGuaranteesSchema(available, description)
+        return AppropriateGuarantees(available, description)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -1069,7 +1069,7 @@ class TheAppropriateGuaranteesSchema:
         return result
 
 
-class ThePresenceOfEnforceableRightsAndEffectiveRemediesSchema:
+class PresenceOfEnforceableRightsAndEffectiveRemedies:
     """Presence of enforceable rights and effective remedies"""
     """Presence of enforceable rights and effective remedies?"""
     available: Optional[bool]
@@ -1081,11 +1081,11 @@ class ThePresenceOfEnforceableRightsAndEffectiveRemediesSchema:
         self.description = description
 
     @staticmethod
-    def from_dict(obj: Any) -> 'ThePresenceOfEnforceableRightsAndEffectiveRemediesSchema':
+    def from_dict(obj: Any) -> 'PresenceOfEnforceableRightsAndEffectiveRemedies':
         assert isinstance(obj, dict)
         available = from_union([from_bool, from_none], obj.get("available"))
         description = from_union([from_str, from_none], obj.get("description"))
-        return ThePresenceOfEnforceableRightsAndEffectiveRemediesSchema(available, description)
+        return PresenceOfEnforceableRightsAndEffectiveRemedies(available, description)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -1094,7 +1094,7 @@ class ThePresenceOfEnforceableRightsAndEffectiveRemediesSchema:
         return result
 
 
-class TheStandardDataProtectionClauseSchema:
+class StandardDataProtectionClause:
     """Schema on Standard Data Protection clauses."""
     """Does a standard data protection clause exist?"""
     available: Optional[bool]
@@ -1106,11 +1106,11 @@ class TheStandardDataProtectionClauseSchema:
         self.description = description
 
     @staticmethod
-    def from_dict(obj: Any) -> 'TheStandardDataProtectionClauseSchema':
+    def from_dict(obj: Any) -> 'StandardDataProtectionClause':
         assert isinstance(obj, dict)
         available = from_union([from_bool, from_none], obj.get("available"))
         description = from_union([from_str, from_none], obj.get("description"))
-        return TheStandardDataProtectionClauseSchema(available, description)
+        return StandardDataProtectionClause(available, description)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -1120,17 +1120,17 @@ class TheStandardDataProtectionClauseSchema:
 
 
 class ThirdCountryTransferElement:
-    adequacy_decision: Optional[TheAdequacyDecisionSchema]
+    adequacy_decision: Optional[AdequacyDecision]
     """Suitable guarantees according to Art. 45"""
-    appropriate_guarantees: Optional[TheAppropriateGuaranteesSchema]
+    appropriate_guarantees: Optional[AppropriateGuarantees]
     """The country code of the third country."""
     country: Optional[str]
     """Presence of enforceable rights and effective remedies"""
-    presence_of_enforceable_rights_and_effective_remedies: Optional[ThePresenceOfEnforceableRightsAndEffectiveRemediesSchema]
+    presence_of_enforceable_rights_and_effective_remedies: Optional[PresenceOfEnforceableRightsAndEffectiveRemedies]
     """Schema on Standard Data Protection clauses."""
-    standard_data_protection_clause: Optional[TheStandardDataProtectionClauseSchema]
+    standard_data_protection_clause: Optional[StandardDataProtectionClause]
 
-    def __init__(self, adequacy_decision: Optional[TheAdequacyDecisionSchema], appropriate_guarantees: Optional[TheAppropriateGuaranteesSchema], country: Optional[str], presence_of_enforceable_rights_and_effective_remedies: Optional[ThePresenceOfEnforceableRightsAndEffectiveRemediesSchema], standard_data_protection_clause: Optional[TheStandardDataProtectionClauseSchema]) -> None:
+    def __init__(self, adequacy_decision: Optional[AdequacyDecision], appropriate_guarantees: Optional[AppropriateGuarantees], country: Optional[str], presence_of_enforceable_rights_and_effective_remedies: Optional[PresenceOfEnforceableRightsAndEffectiveRemedies], standard_data_protection_clause: Optional[StandardDataProtectionClause]) -> None:
         self.adequacy_decision = adequacy_decision
         self.appropriate_guarantees = appropriate_guarantees
         self.country = country
@@ -1140,49 +1140,49 @@ class ThirdCountryTransferElement:
     @staticmethod
     def from_dict(obj: Any) -> 'ThirdCountryTransferElement':
         assert isinstance(obj, dict)
-        adequacy_decision = from_union([TheAdequacyDecisionSchema.from_dict, from_none], obj.get("adequacyDecision"))
-        appropriate_guarantees = from_union([TheAppropriateGuaranteesSchema.from_dict, from_none], obj.get("appropriateGuarantees"))
+        adequacy_decision = from_union([AdequacyDecision.from_dict, from_none], obj.get("adequacyDecision"))
+        appropriate_guarantees = from_union([AppropriateGuarantees.from_dict, from_none], obj.get("appropriateGuarantees"))
         country = from_union([from_str, from_none], obj.get("country"))
-        presence_of_enforceable_rights_and_effective_remedies = from_union([ThePresenceOfEnforceableRightsAndEffectiveRemediesSchema.from_dict, from_none], obj.get("presenceOfEnforceableRightsAndEffectiveRemedies"))
-        standard_data_protection_clause = from_union([TheStandardDataProtectionClauseSchema.from_dict, from_none], obj.get("standardDataProtectionClause"))
+        presence_of_enforceable_rights_and_effective_remedies = from_union([PresenceOfEnforceableRightsAndEffectiveRemedies.from_dict, from_none], obj.get("presenceOfEnforceableRightsAndEffectiveRemedies"))
+        standard_data_protection_clause = from_union([StandardDataProtectionClause.from_dict, from_none], obj.get("standardDataProtectionClause"))
         return ThirdCountryTransferElement(adequacy_decision, appropriate_guarantees, country, presence_of_enforceable_rights_and_effective_remedies, standard_data_protection_clause)
 
     def to_dict(self) -> dict:
         result: dict = {}
-        result["adequacyDecision"] = from_union([lambda x: to_class(TheAdequacyDecisionSchema, x), from_none], self.adequacy_decision)
-        result["appropriateGuarantees"] = from_union([lambda x: to_class(TheAppropriateGuaranteesSchema, x), from_none], self.appropriate_guarantees)
+        result["adequacyDecision"] = from_union([lambda x: to_class(AdequacyDecision, x), from_none], self.adequacy_decision)
+        result["appropriateGuarantees"] = from_union([lambda x: to_class(AppropriateGuarantees, x), from_none], self.appropriate_guarantees)
         result["country"] = from_union([from_str, from_none], self.country)
-        result["presenceOfEnforceableRightsAndEffectiveRemedies"] = from_union([lambda x: to_class(ThePresenceOfEnforceableRightsAndEffectiveRemediesSchema, x), from_none], self.presence_of_enforceable_rights_and_effective_remedies)
-        result["standardDataProtectionClause"] = from_union([lambda x: to_class(TheStandardDataProtectionClauseSchema, x), from_none], self.standard_data_protection_clause)
+        result["presenceOfEnforceableRightsAndEffectiveRemedies"] = from_union([lambda x: to_class(PresenceOfEnforceableRightsAndEffectiveRemedies, x), from_none], self.presence_of_enforceable_rights_and_effective_remedies)
+        result["standardDataProtectionClause"] = from_union([lambda x: to_class(StandardDataProtectionClause, x), from_none], self.standard_data_protection_clause)
         return result
 
 
 class Tilt:
     """This schema defines the Transparency Information Language"""
     """Defining the right to access and data portability."""
-    access_and_data_portability: TheAccessAndDataPortabilitySchema
+    access_and_data_portability: AccessAndDataPortability
     """Automated decision making and potentially involved logic. Does include profiling."""
-    automated_decision_making: TheAutomatedDecisionMakingSchema
+    automated_decision_making: AutomatedDecisionMaking
     """Notification of change of purpose."""
     changes_of_purpose: List[ChangesOfPurposeElement]
     """The responsible controller is defined in here."""
-    controller: TheControllerSchema
+    controller: Controller
     """A detailed explanation about which data is disclosed in the processing tasks."""
     data_disclosed: List[DataDisclosedElement]
     """The Data Protection Officer (DPO) of the controller."""
-    data_protection_officer: TheDataProtectionOfficerSchema
+    data_protection_officer: DataProtectionOfficer
     """Meta information for the identification and verification of the document."""
-    meta: TheMetaSchema
+    meta: Meta
     """This schema refers to the right to complain."""
-    right_to_complain: TheRightToComplainSchema
+    right_to_complain: RightToComplain
     """The right to data portability as stated in Art. 20 GDPR."""
-    right_to_data_portability: TheRightToDataPortabilitySchema
+    right_to_data_portability: RightToDataPortability
     """Refers to the right of information."""
-    right_to_information: TheRightToInformationSchema
+    right_to_information: RightToInformation
     """This schema refers to the right to rectification or deletion (Art. 16 GDPR)."""
-    right_to_rectification_or_deletion: TheRightToRectificationOrDeletionSchema
+    right_to_rectification_or_deletion: RightToRectificationOrDeletion
     """This schema refers to the right to withdraw consent."""
-    right_to_withdraw_consent: TheRightToWithdrawConsentSchema
+    right_to_withdraw_consent: RightToWithdrawConsent
     """This duty to provide information is limited to the collection of personal data that does
     not take place from the data subject (Art. 14).
     """
@@ -1190,7 +1190,7 @@ class Tilt:
     """This schema refers to the adequacy decisions of any third country transfers."""
     third_country_transfers: List[ThirdCountryTransferElement]
 
-    def __init__(self, access_and_data_portability: TheAccessAndDataPortabilitySchema, automated_decision_making: TheAutomatedDecisionMakingSchema, changes_of_purpose: List[ChangesOfPurposeElement], controller: TheControllerSchema, data_disclosed: List[DataDisclosedElement], data_protection_officer: TheDataProtectionOfficerSchema, meta: TheMetaSchema, right_to_complain: TheRightToComplainSchema, right_to_data_portability: TheRightToDataPortabilitySchema, right_to_information: TheRightToInformationSchema, right_to_rectification_or_deletion: TheRightToRectificationOrDeletionSchema, right_to_withdraw_consent: TheRightToWithdrawConsentSchema, sources: List[TiltSource], third_country_transfers: List[ThirdCountryTransferElement]) -> None:
+    def __init__(self, access_and_data_portability: AccessAndDataPortability, automated_decision_making: AutomatedDecisionMaking, changes_of_purpose: List[ChangesOfPurposeElement], controller: Controller, data_disclosed: List[DataDisclosedElement], data_protection_officer: DataProtectionOfficer, meta: Meta, right_to_complain: RightToComplain, right_to_data_portability: RightToDataPortability, right_to_information: RightToInformation, right_to_rectification_or_deletion: RightToRectificationOrDeletion, right_to_withdraw_consent: RightToWithdrawConsent, sources: List[TiltSource], third_country_transfers: List[ThirdCountryTransferElement]) -> None:
         self.access_and_data_portability = access_and_data_portability
         self.automated_decision_making = automated_decision_making
         self.changes_of_purpose = changes_of_purpose
@@ -1209,36 +1209,36 @@ class Tilt:
     @staticmethod
     def from_dict(obj: Any) -> 'Tilt':
         assert isinstance(obj, dict)
-        access_and_data_portability = TheAccessAndDataPortabilitySchema.from_dict(obj.get("accessAndDataPortability"))
-        automated_decision_making = TheAutomatedDecisionMakingSchema.from_dict(obj.get("automatedDecisionMaking"))
+        access_and_data_portability = AccessAndDataPortability.from_dict(obj.get("accessAndDataPortability"))
+        automated_decision_making = AutomatedDecisionMaking.from_dict(obj.get("automatedDecisionMaking"))
         changes_of_purpose = from_list(ChangesOfPurposeElement.from_dict, obj.get("changesOfPurpose"))
-        controller = TheControllerSchema.from_dict(obj.get("controller"))
+        controller = Controller.from_dict(obj.get("controller"))
         data_disclosed = from_list(DataDisclosedElement.from_dict, obj.get("dataDisclosed"))
-        data_protection_officer = TheDataProtectionOfficerSchema.from_dict(obj.get("dataProtectionOfficer"))
-        meta = TheMetaSchema.from_dict(obj.get("meta"))
-        right_to_complain = TheRightToComplainSchema.from_dict(obj.get("rightToComplain"))
-        right_to_data_portability = TheRightToDataPortabilitySchema.from_dict(obj.get("rightToDataPortability"))
-        right_to_information = TheRightToInformationSchema.from_dict(obj.get("rightToInformation"))
-        right_to_rectification_or_deletion = TheRightToRectificationOrDeletionSchema.from_dict(obj.get("rightToRectificationOrDeletion"))
-        right_to_withdraw_consent = TheRightToWithdrawConsentSchema.from_dict(obj.get("rightToWithdrawConsent"))
+        data_protection_officer = DataProtectionOfficer.from_dict(obj.get("dataProtectionOfficer"))
+        meta = Meta.from_dict(obj.get("meta"))
+        right_to_complain = RightToComplain.from_dict(obj.get("rightToComplain"))
+        right_to_data_portability = RightToDataPortability.from_dict(obj.get("rightToDataPortability"))
+        right_to_information = RightToInformation.from_dict(obj.get("rightToInformation"))
+        right_to_rectification_or_deletion = RightToRectificationOrDeletion.from_dict(obj.get("rightToRectificationOrDeletion"))
+        right_to_withdraw_consent = RightToWithdrawConsent.from_dict(obj.get("rightToWithdrawConsent"))
         sources = from_list(TiltSource.from_dict, obj.get("sources"))
         third_country_transfers = from_list(ThirdCountryTransferElement.from_dict, obj.get("thirdCountryTransfers"))
         return Tilt(access_and_data_portability, automated_decision_making, changes_of_purpose, controller, data_disclosed, data_protection_officer, meta, right_to_complain, right_to_data_portability, right_to_information, right_to_rectification_or_deletion, right_to_withdraw_consent, sources, third_country_transfers)
 
     def to_dict(self) -> dict:
         result: dict = {}
-        result["accessAndDataPortability"] = to_class(TheAccessAndDataPortabilitySchema, self.access_and_data_portability)
-        result["automatedDecisionMaking"] = to_class(TheAutomatedDecisionMakingSchema, self.automated_decision_making)
+        result["accessAndDataPortability"] = to_class(AccessAndDataPortability, self.access_and_data_portability)
+        result["automatedDecisionMaking"] = to_class(AutomatedDecisionMaking, self.automated_decision_making)
         result["changesOfPurpose"] = from_list(lambda x: to_class(ChangesOfPurposeElement, x), self.changes_of_purpose)
-        result["controller"] = to_class(TheControllerSchema, self.controller)
+        result["controller"] = to_class(Controller, self.controller)
         result["dataDisclosed"] = from_list(lambda x: to_class(DataDisclosedElement, x), self.data_disclosed)
-        result["dataProtectionOfficer"] = to_class(TheDataProtectionOfficerSchema, self.data_protection_officer)
-        result["meta"] = to_class(TheMetaSchema, self.meta)
-        result["rightToComplain"] = to_class(TheRightToComplainSchema, self.right_to_complain)
-        result["rightToDataPortability"] = to_class(TheRightToDataPortabilitySchema, self.right_to_data_portability)
-        result["rightToInformation"] = to_class(TheRightToInformationSchema, self.right_to_information)
-        result["rightToRectificationOrDeletion"] = to_class(TheRightToRectificationOrDeletionSchema, self.right_to_rectification_or_deletion)
-        result["rightToWithdrawConsent"] = to_class(TheRightToWithdrawConsentSchema, self.right_to_withdraw_consent)
+        result["dataProtectionOfficer"] = to_class(DataProtectionOfficer, self.data_protection_officer)
+        result["meta"] = to_class(Meta, self.meta)
+        result["rightToComplain"] = to_class(RightToComplain, self.right_to_complain)
+        result["rightToDataPortability"] = to_class(RightToDataPortability, self.right_to_data_portability)
+        result["rightToInformation"] = to_class(RightToInformation, self.right_to_information)
+        result["rightToRectificationOrDeletion"] = to_class(RightToRectificationOrDeletion, self.right_to_rectification_or_deletion)
+        result["rightToWithdrawConsent"] = to_class(RightToWithdrawConsent, self.right_to_withdraw_consent)
         result["sources"] = from_list(lambda x: to_class(TiltSource, x), self.sources)
         result["thirdCountryTransfers"] = from_list(lambda x: to_class(ThirdCountryTransferElement, x), self.third_country_transfers)
         return result
