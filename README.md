@@ -21,7 +21,7 @@ Successfully installed tilt-0.0.1
 ## Basic usage
 
 ```info
-See here for an [interactive playground]().
+See here for an [interactive playground](https://nbviewer.jupyter.org/github/Transparency-Information-Language/python-tilt/blob/master/python-tilt-example.ipynb).
 ```
 
 1) Import the transparency information language binding/library.
