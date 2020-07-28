@@ -98,6 +98,42 @@ print(meta.to_dict())
 # {'_hash': 'bd8f3c314b73d85175c8ccf15b4b8d26348beca96c9df39ba98fa5dda3f60fcc', '_id': '<your-id-01>', 'created': '2020-10-02T22:08:12.510696', 'language': 'en', 'modified': '2020-07-27T15:14:35.689606', 'name': 'Green Compancy SE', 'status': 'active', 'url': 'https://greencompany.implementation.cloud', 'version': 42}
 ```
 
+## Validate documents
+See the following example code on how to validate documents using [fastjsonschema](https://horejsek.github.io/python-fastjsonschema/).
+
+```python
+import fastjsonschema
+import json
+
+import requests
+
+# Load schema to validate against
+file = requests.get('https://raw.githubusercontent.com/Transparency-Information-Language/schema/master/tilt-schema.json')
+schema = json.loads(file.content)
+
+# Load instance/document to validate;
+# you may use your own tilt object with .to_dict() here
+file = requests.get('https://raw.githubusercontent.com/Transparency-Information-Language/schema/master/tilt.json')
+instance = json.loads(file.content)
+
+# Compile schema
+validate_func = fastjsonschema.compile(schema)
+
+# Validate instance against schema
+validate_func(instance)
+## {'meta': {'_id': 'f1424f86-ca0f-4f0c-9438-43cc00509931', 'name': 'Green Company', 'created': '2020-04-03T15:53:05.929588', 'modified': '2020-04-03T15:53:05.929588',...
+## => document is valid
+
+
+# Load another example
+file = requests.get('https://raw.githubusercontent.com/Transparency-Information-Language/schema/master/tilt-NOT-valid.json')
+instance = json.loads(file.content)
+
+# Validate another example
+validate_func(instance)
+## JsonSchemaException: data.controller must contain ['name', 'address', 'country', 'representative'] properties
+## => document is invalid
+```
 
 
 ## Author
