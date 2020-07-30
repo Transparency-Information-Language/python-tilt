@@ -991,7 +991,7 @@ class SourceSource:
         return result
 
 
-class TiltSource:
+class Source:
     """This refers to an locally unique ID in an arbitrary but deterministic format."""
     id: str
     """The category the data refer to."""
@@ -1005,12 +1005,12 @@ class TiltSource:
         self.sources = sources
 
     @staticmethod
-    def from_dict(obj: Any) -> 'TiltSource':
+    def from_dict(obj: Any) -> 'Source':
         assert isinstance(obj, dict)
         id = from_str(obj.get("_id"))
         data_category = from_str(obj.get("dataCategory"))
         sources = from_list(SourceSource.from_dict, obj.get("sources"))
-        return TiltSource(id, data_category, sources)
+        return Source(id, data_category, sources)
 
     def to_dict(self) -> dict:
         result: dict = {}
@@ -1186,11 +1186,11 @@ class Tilt:
     """This duty to provide information is limited to the collection of personal data that does
     not take place from the data subject (Art. 14).
     """
-    sources: List[TiltSource]
+    sources: List[Source]
     """This schema refers to the adequacy decisions of any third country transfers."""
     third_country_transfers: List[ThirdCountryTransferElement]
 
-    def __init__(self, access_and_data_portability: AccessAndDataPortability, automated_decision_making: AutomatedDecisionMaking, changes_of_purpose: List[ChangesOfPurposeElement], controller: Controller, data_disclosed: List[DataDisclosedElement], data_protection_officer: DataProtectionOfficer, meta: Meta, right_to_complain: RightToComplain, right_to_data_portability: RightToDataPortability, right_to_information: RightToInformation, right_to_rectification_or_deletion: RightToRectificationOrDeletion, right_to_withdraw_consent: RightToWithdrawConsent, sources: List[TiltSource], third_country_transfers: List[ThirdCountryTransferElement]) -> None:
+    def __init__(self, access_and_data_portability: AccessAndDataPortability, automated_decision_making: AutomatedDecisionMaking, changes_of_purpose: List[ChangesOfPurposeElement], controller: Controller, data_disclosed: List[DataDisclosedElement], data_protection_officer: DataProtectionOfficer, meta: Meta, right_to_complain: RightToComplain, right_to_data_portability: RightToDataPortability, right_to_information: RightToInformation, right_to_rectification_or_deletion: RightToRectificationOrDeletion, right_to_withdraw_consent: RightToWithdrawConsent, sources: List[Source], third_country_transfers: List[ThirdCountryTransferElement]) -> None:
         self.access_and_data_portability = access_and_data_portability
         self.automated_decision_making = automated_decision_making
         self.changes_of_purpose = changes_of_purpose
@@ -1221,7 +1221,7 @@ class Tilt:
         right_to_information = RightToInformation.from_dict(obj.get("rightToInformation"))
         right_to_rectification_or_deletion = RightToRectificationOrDeletion.from_dict(obj.get("rightToRectificationOrDeletion"))
         right_to_withdraw_consent = RightToWithdrawConsent.from_dict(obj.get("rightToWithdrawConsent"))
-        sources = from_list(TiltSource.from_dict, obj.get("sources"))
+        sources = from_list(Source.from_dict, obj.get("sources"))
         third_country_transfers = from_list(ThirdCountryTransferElement.from_dict, obj.get("thirdCountryTransfers"))
         return Tilt(access_and_data_portability, automated_decision_making, changes_of_purpose, controller, data_disclosed, data_protection_officer, meta, right_to_complain, right_to_data_portability, right_to_information, right_to_rectification_or_deletion, right_to_withdraw_consent, sources, third_country_transfers)
 
@@ -1239,7 +1239,7 @@ class Tilt:
         result["rightToInformation"] = to_class(RightToInformation, self.right_to_information)
         result["rightToRectificationOrDeletion"] = to_class(RightToRectificationOrDeletion, self.right_to_rectification_or_deletion)
         result["rightToWithdrawConsent"] = to_class(RightToWithdrawConsent, self.right_to_withdraw_consent)
-        result["sources"] = from_list(lambda x: to_class(TiltSource, x), self.sources)
+        result["sources"] = from_list(lambda x: to_class(Source, x), self.sources)
         result["thirdCountryTransfers"] = from_list(lambda x: to_class(ThirdCountryTransferElement, x), self.third_country_transfers)
         return result
 

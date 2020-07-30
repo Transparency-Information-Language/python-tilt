@@ -5,10 +5,10 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="tilt",
-    version="0.0.3",
+    version="0.0.4",
     author="Elias Grünewald",
     author_email="gruenewald@tu-berlin.de",
-    description="A python language binding for the Transparancy Information Language and Toolkit (TILT)",
+    description="A python language binding for the Transparency Information Language and Toolkit (TILT)",
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/Transparency-Information-Language/python-tilt",
