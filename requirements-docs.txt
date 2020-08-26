@@ -1,1 +1,1 @@
-sphinx-me
+sphinx-me=0.3
