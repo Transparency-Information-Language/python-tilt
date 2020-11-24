@@ -139,4 +139,4 @@ validate_func(instance)
 Elias Grünewald
 
 ## License
-GNU General Public License, Version 3
+[MIT License](LICENSE)
