@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="tilt",
-    version="0.0.4",
+    version="0.0.5",
     author="Elias Grünewald",
     author_email="gruenewald@tu-berlin.de",
     description="A python language binding for the Transparency Information Language and Toolkit (TILT)",
@@ -15,7 +15,7 @@ setuptools.setup(
     packages=setuptools.find_packages(),
     classifiers=[
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: GNU General Public License v3",
+        "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
     python_requires='>=3.6',
